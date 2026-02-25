@@ -20,7 +20,7 @@ export default function Header() {
         <header className={`main-header ${scrolled ? 'scrolled' : ''}`}>
             <div className="container flex items-center justify-between">
                 <Link href="/" className="logo">
-                    TECHYLIST
+                    BITCRYPTPRESS
                 </Link>
                 <nav className="main-nav">
                     <ul className="flex gap-2">

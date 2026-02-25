@@ -7,7 +7,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     if (!app) return { title: 'Download Not Found' };
 
     return {
-        title: `Downloading ${app.title} APK (Secure) - Techylist`,
+        title: `Downloading ${app.title} APK (Secure) - Bitcryptpress`,
         description: `Preparing your secure download link for ${app.title}. Free and safe APK download.`,
     };
 }

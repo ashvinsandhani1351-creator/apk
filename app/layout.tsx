@@ -3,8 +3,8 @@ import "./globals.css";
 import Header from "@/components/Header";
 
 export const metadata: Metadata = {
-  title: "Techylist - The Hub Of Latest Apps & Games",
-  description: "Techylist is a portal on which you can find APK files of the latest apps & games. We ensure that all the files shared here are safe & secure.",
+  title: "Bitcryptpress - The Hub Of Latest Apps & Games",
+  description: "Bitcryptpress is a portal on which you can find APK files of the latest apps & games. We ensure that all the files shared here are safe & secure.",
 };
 
 export default function RootLayout({
@@ -27,9 +27,9 @@ export default function RootLayout({
           <div className="container">
             <div className="flex justify-between" style={{ marginBottom: '40px' }}>
               <div style={{ maxWidth: '300px' }}>
-                <h2 style={{ fontSize: '32px', marginBottom: '20px' }}>TECHYLIST</h2>
+                <h2 style={{ fontSize: '32px', marginBottom: '20px' }}>BITCRYPTPRESS</h2>
                 <p style={{ opacity: 0.9 }}>
-                  Techylist is a portal on which you can find APK files of the latest apps & games. We ensure that all the files shared here are safe & secure.
+                  Bitcryptpress is a portal on which you can find APK files of the latest apps & games. We ensure that all the files shared here are safe & secure.
                 </p>
               </div>
               <div className="flex gap-4">
@@ -44,7 +44,7 @@ export default function RootLayout({
               </div>
             </div>
             <div style={{ borderTop: '1px solid rgba(255,255,255,0.2)', paddingTop: '20px', textAlign: 'center', fontSize: '14px' }}>
-              <p>Copyright © 2026 · Techylist</p>
+              <p>Copyright © 2026 · Bitcryptpress</p>
               <p style={{ marginTop: '5px', opacity: 0.7 }}>All the Logos, Trademarks and Images belong to their Respective Owners.</p>
             </div>
           </div>

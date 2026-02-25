@@ -88,7 +88,7 @@ export default function DownloadTimer({ appId, appName, appIcon }: DownloadTimer
                 ) : (
                     <div className="w-full flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <div style={{ backgroundColor: '#e8f5e9', color: '#2e7d32', padding: '12px', borderRadius: '8px', fontSize: '14px', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                            <ShieldCheck size={18} /> Verified Safe by Techylist Scan
+                            <ShieldCheck size={18} /> Verified Safe by Bitcryptpress Scan
                         </div>
 
                         <p style={{ textAlign: 'left', fontWeight: 700, fontSize: '16px', marginTop: '10px' }}>Choose a Mirror to Start Download:</p>

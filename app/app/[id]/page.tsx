@@ -7,10 +7,10 @@ import { getArticleOverride } from '@/lib/articles';
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const app = await getAppDetails(id);
-    if (!app) return { title: 'App Not Found - Techylist' };
+    if (!app) return { title: 'App Not Found - Bitcryptpress' };
 
     return {
-        title: `${app.title} APK Download (Latest Version) - Techylist`,
+        title: `${app.title} APK Download (Latest Version) - Bitcryptpress`,
         description: `Download ${app.title} APK for Android. ${app.summary || app.description.substring(0, 150)}...`,
         openGraph: {
             images: [app.icon],
