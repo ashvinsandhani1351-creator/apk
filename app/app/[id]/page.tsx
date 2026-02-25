@@ -1,7 +1,8 @@
-import { Download, Star, Users, Info, Calendar } from 'lucide-react';
+import { Download, Star, Users, Info, Calendar, ShieldCheck, Award } from 'lucide-react';
 import Link from 'next/link';
 import ScreenshotGallery from '@/components/ScreenshotGallery';
 import { getAppDetails } from '@/lib/scraper';
+import { getArticleOverride } from '@/lib/articles';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -24,6 +25,8 @@ export default async function AppDetail({ params }: { params: Promise<{ id: stri
     if (!app) {
         return <div className="container py-20 text-center">App not found</div>;
     }
+
+    const articleOverride = getArticleOverride(id);
 
     return (
         <div className="flex flex-col gap-8">
@@ -62,13 +65,39 @@ export default async function AppDetail({ params }: { params: Promise<{ id: stri
             {/* Screenshots */}
             <ScreenshotGallery screenshots={app.screenshots} />
 
-            {/* Description */}
+            {/* Description / Article */}
             <section className="card">
-                <h2 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '20px' }}>About this app</h2>
-                <div
-                    style={{ lineHeight: '1.8', whiteSpace: 'pre-wrap' }}
-                    dangerouslySetInnerHTML={{ __html: app.descriptionHTML }}
-                />
+                <div className="flex items-center gap-2 mb-6">
+                    <Award size={24} color="var(--primary-color)" />
+                    <h2 style={{ fontSize: '22px', fontWeight: 700, margin: 0 }}>
+                        {articleOverride ? 'Expert Review & Insights' : 'About this app'}
+                    </h2>
+                </div>
+
+                {articleOverride ? (
+                    <div
+                        className="human-article"
+                        style={{ lineHeight: '1.8', fontSize: '16px' }}
+                        dangerouslySetInnerHTML={{ __html: articleOverride.content }}
+                    />
+                ) : (
+                    <div className="smart-review">
+                        <div style={{ background: '#f0f7ff', borderLeft: '4px solid var(--primary-color)', padding: '20px', borderRadius: '8px', marginBottom: '30px' }}>
+                            <p style={{ fontWeight: 600, fontSize: '17px', color: '#000', marginBottom: '10px' }}>
+                                <ShieldCheck size={18} style={{ display: 'inline', marginRight: '8px', verticalAlign: 'text-bottom' }} />
+                                Editor's Take:
+                            </p>
+                            <p style={{ fontStyle: 'italic', color: '#444' }}>
+                                "{app.title} by {app.developer} is one of the most trending apps in the {app.genre} category. Our community appreciates its {app.scoreText} rating and overall reliability."
+                            </p>
+                        </div>
+
+                        <div
+                            style={{ lineHeight: '1.8', whiteSpace: 'pre-wrap' }}
+                            dangerouslySetInnerHTML={{ __html: app.descriptionHTML }}
+                        />
+                    </div>
+                )}
             </section>
 
             {/* Details Table */}
