@@ -1,4 +1,5 @@
 import { Download, Star, Users, Info, Calendar } from 'lucide-react';
+import Link from 'next/link';
 import ScreenshotGallery from '@/components/ScreenshotGallery';
 import { getAppDetails } from '@/lib/scraper';
 
@@ -49,15 +50,13 @@ export default async function AppDetail({ params }: { params: Promise<{ id: stri
                         <span className="flex items-center gap-1"><Calendar size={16} /> Updated: {app.updated}</span>
                     </div>
                 </div>
-                <a
-                    href={app.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                <Link
+                    href={`/app/${id}/download`}
                     className="btn-primary"
-                    style={{ padding: '15px 30px', fontSize: '18px' }}
+                    style={{ padding: '15px 30px', fontSize: '18px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}
                 >
                     <Download size={20} /> Download APK ({app.size || 'Varies'})
-                </a>
+                </Link>
             </div>
 
             {/* Screenshots */}
