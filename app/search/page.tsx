@@ -1,12 +1,5 @@
 import AppCard from '@/components/AppCard';
-
-async function searchApps(query: string) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/apps?q=${query}`, {
-        cache: 'no-store'
-    });
-    if (!res.ok) return [];
-    return res.json();
-}
+import { searchApps } from '@/lib/scraper';
 
 export default async function SearchPage({
     searchParams
@@ -14,7 +7,7 @@ export default async function SearchPage({
     searchParams: Promise<{ q: string }>
 }) {
     const { q } = await searchParams;
-    const results = await searchApps(q || '');
+    const results = await searchApps(q || '', 30);
 
     return (
         <div className="flex flex-col gap-8">
@@ -28,7 +21,7 @@ export default async function SearchPage({
                 </div>
 
                 {results.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="responsive-grid">
                         {results.map((app: any) => (
                             <AppCard key={app.appId} app={app} />
                         ))}

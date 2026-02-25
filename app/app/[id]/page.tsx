@@ -1,13 +1,6 @@
 import { Download, Star, Users, Info, Calendar } from 'lucide-react';
 import ScreenshotGallery from '@/components/ScreenshotGallery';
-
-async function getAppDetails(id: string) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/apps/${id}`, {
-        next: { revalidate: 3600 }
-    });
-    if (!res.ok) return null;
-    return res.json();
-}
+import { getAppDetails } from '@/lib/scraper';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -35,7 +28,7 @@ export default async function AppDetail({ params }: { params: Promise<{ id: stri
         <div className="flex flex-col gap-8">
             {/* Breadcrumbs */}
             <nav style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
-                Home » {app.category} » {app.title}
+                Home » {app.genre || 'App'} » {app.title}
             </nav>
 
             {/* Hero Section */}
@@ -84,8 +77,8 @@ export default async function AppDetail({ params }: { params: Promise<{ id: stri
                 <h2 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '20px' }}>Additional Information</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="flex justify-between border-bottom pb-2" style={{ borderBottom: '1px solid var(--border-color)' }}>
-                        <span style={{ fontWeight: 500 }}>Category</span>
-                        <span>{app.category}</span>
+                        <span style={{ fontWeight: 500 }}>Genre</span>
+                        <span>{app.genre || 'App'}</span>
                     </div>
                     <div className="flex justify-between border-bottom pb-2" style={{ borderBottom: '1px solid var(--border-color)' }}>
                         <span style={{ fontWeight: 500 }}>Initial Release</span>

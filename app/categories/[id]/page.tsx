@@ -1,16 +1,9 @@
 import AppCard from '@/components/AppCard';
-
-async function getCategoryApps(category: string, num: number = 24) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/apps?cat=${category.toUpperCase()}&n=${num}`, {
-        next: { revalidate: 3600 }
-    });
-    if (!res.ok) return [];
-    return res.json();
-}
+import { getApps } from '@/lib/scraper';
 
 export default async function CategoryDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const apps = await getCategoryApps(id);
+    const apps = await getApps('TOP_FREE', id.toUpperCase(), 24);
 
     return (
         <div className="flex flex-col gap-10">
@@ -24,7 +17,7 @@ export default async function CategoryDetailPage({ params }: { params: Promise<{
                 </div>
 
                 {apps.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="responsive-grid">
                         {apps.map((app: any) => (
                             <AppCard key={app.appId} app={app} showDownload />
                         ))}

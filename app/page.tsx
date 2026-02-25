@@ -1,31 +1,20 @@
 import AppCard from '@/components/AppCard';
-
-async function getApps(collection: string = 'TOP_FREE', num: number = 8) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/apps?coll=${collection}&n=${num}`, {
-    next: { revalidate: 3600 } // Cache for 1 hour
-  });
-  if (!res.ok) return [];
-  return res.json();
-}
+import { getApps, getAppDetails } from '@/lib/scraper';
+import { getPinnedIds } from '@/lib/pins';
 
 async function getPinnedApps() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/admin/pins`, {
-    next: { revalidate: 60 }
-  });
-  if (!res.ok) return [];
-  const pins = await res.json();
+  const pins = getPinnedIds();
   const apps = await Promise.all(pins.map(async (id: string) => {
-    const appRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/apps/${id}`);
-    return appRes.ok ? appRes.json() : null;
+    return await getAppDetails(id);
   }));
   return apps.filter(app => app !== null);
 }
 
 export default async function Home() {
   const featuredApps = await getPinnedApps();
-  const editorsChoice = await getApps('TOP_FREE', 10);
-  const recentlyUpdated = await getApps('NEW_FREE', 12);
-  const topGames = await getApps('TOP_FREE_GAMES', 12);
+  const editorsChoice = await getApps('TOP_FREE', undefined, 10);
+  const recentlyUpdated = await getApps('NEW_FREE', undefined, 12);
+  const topGames = await getApps('TOP_FREE_GAMES', undefined, 12);
 
   return (
     <div className="flex flex-col gap-12">
