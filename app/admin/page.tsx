@@ -41,7 +41,7 @@ export default function AdminDashboard() {
             <h1 style={{ fontSize: '32px', fontWeight: 700 }}>Admin Dashboard</h1>
 
             {success && (
-                <div style={{ backgroundColor: '#e8f5e9', color: '#2e7d32', padding: '15px', borderRadius: '8px', display: 'flex', itemsCenter: 'center', gap: '10px' }}>
+                <div style={{ backgroundColor: '#e8f5e9', color: '#2e7d32', padding: '15px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <CheckCircle size={20} /> {success}
                 </div>
             )}
