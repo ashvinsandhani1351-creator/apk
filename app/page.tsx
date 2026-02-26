@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import AppCard from '@/components/AppCard';
 import { getApps, getAppDetails, getDiscoverApps } from '@/lib/scraper';
+import { getLatestNews, NewsItem } from '@/lib/news';
 import { getPinnedIds } from '@/lib/pins';
 
 async function getPinnedApps() {
@@ -12,11 +13,16 @@ async function getPinnedApps() {
 }
 
 export default async function Home() {
-  const featuredApps = await getPinnedApps();
-  const editorsChoice = await getApps('TOP_FREE', undefined, 10);
-  const recentlyUpdated = await getApps('NEW_FREE', undefined, 12);
-  const topGames = await getApps('TOP_FREE_GAMES', undefined, 12);
-  const discoverApps = await getDiscoverApps(12);
+  const [featuredApps, editorsChoice, recentlyUpdated, topGames, discoverApps, allNews] = await Promise.all([
+    getPinnedApps(),
+    getApps('TOP_FREE', undefined, 10),
+    getApps('NEW_FREE', undefined, 12),
+    getApps('TOP_FREE_GAMES', undefined, 12),
+    getDiscoverApps(12),
+    getLatestNews().catch(() => [] as NewsItem[])
+  ]);
+
+  const latestNews = allNews.slice(0, 3);
 
   const categories = [
     { name: 'Social', id: 'SOCIAL' },
@@ -107,6 +113,32 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* Latest Tech News Section */}
+      {latestNews.length > 0 && (
+        <section>
+          <div className="section-title" style={{ borderLeftColor: '#ff9800' }}>
+            <h2>Latest Tech News</h2>
+            <Link href="/news" style={{ fontSize: '14px', color: 'var(--primary-color)', fontWeight: 600, textDecoration: 'none' }}>View All →</Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {latestNews.map((item) => (
+              <Link key={item.id} href={`/news/${item.id}`} className="card hover-lift flex flex-col overflow-hidden" style={{ textDecoration: 'none', color: 'inherit', padding: 0 }}>
+                {item.imageUrl && (
+                  <div style={{ position: 'relative', width: '100%', height: '160px', backgroundColor: '#f0f0f0' }}>
+                    <img src={item.imageUrl} alt={item.title} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
+                  </div>
+                )}
+                <div style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '8px' }}>{item.source} • {new Date(item.pubDate).toLocaleDateString()}</span>
+                  <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px', lineHeight: '1.4' }}>{item.title}</h3>
+                  <p style={{ color: 'var(--text-main)', fontSize: '13px', lineHeight: '1.5', flex: 1 }}>{item.contentSnippet.substring(0, 80)}...</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Trending Comparisons Section */}
       <section>

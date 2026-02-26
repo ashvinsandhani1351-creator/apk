@@ -40,6 +40,11 @@ export default function Header() {
                             </Link>
                         </li>
                         <li>
+                            <Link href="/news" className={`nav-link ${pathname === '/news' ? 'active' : ''}`}>
+                                News
+                            </Link>
+                        </li>
+                        <li>
                             <Link href="/collections" className={`nav-link ${pathname === '/collections' ? 'active' : ''}`}>
                                 Collections
                             </Link>
