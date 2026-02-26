@@ -115,12 +115,12 @@ export default async function Home() {
       </section>
 
       {/* Latest Tech News Section */}
-      {latestNews.length > 0 && (
-        <section>
-          <div className="section-title" style={{ borderLeftColor: '#ff9800' }}>
-            <h2>Latest Tech News</h2>
-            <Link href="/news" style={{ fontSize: '14px', color: 'var(--primary-color)', fontWeight: 600, textDecoration: 'none' }}>View All →</Link>
-          </div>
+      <section>
+        <div className="section-title" style={{ borderLeftColor: '#ff9800' }}>
+          <h2>Latest Tech News</h2>
+          <Link href="/news" style={{ fontSize: '14px', color: 'var(--primary-color)', fontWeight: 600, textDecoration: 'none' }}>View All →</Link>
+        </div>
+        {latestNews.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {latestNews.map((item) => (
               <Link key={item.id} href={`/news/${item.id}`} className="card hover-lift flex flex-col overflow-hidden" style={{ textDecoration: 'none', color: 'inherit', padding: 0 }}>
@@ -137,8 +137,13 @@ export default async function Home() {
               </Link>
             ))}
           </div>
-        </section>
-      )}
+        ) : (
+          <div className="card text-center py-10" style={{ backgroundColor: '#fff8e1', border: '1px solid #ffe082' }}>
+            <p style={{ color: '#f57c00', fontWeight: 600 }}>Refreshing latest headlines...</p>
+            <p className="text-muted mt-2 text-sm">Our news bots are checking for updates. Click 'View All' to see the full archive.</p>
+          </div>
+        )}
+      </section>
 
       {/* Trending Comparisons Section */}
       <section>
