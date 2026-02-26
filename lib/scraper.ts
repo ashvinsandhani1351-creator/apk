@@ -7,7 +7,7 @@ export async function getApps(collection: string = 'TOP_FREE', category?: string
         // Map common names to gplay constants or internal strings
         const collectionMap: { [key: string]: string } = {
             'TOP_FREE': 'TOP_FREE',
-            'NEW_FREE': 'TOP_FREE', // NEW_FREE is often unstable
+            'NEW_FREE': 'TOP_FREE',
             'TOP_FREE_GAMES': 'TOP_FREE',
             'NEW_FREE_GAMES': 'TOP_FREE'
         };
@@ -15,7 +15,8 @@ export async function getApps(collection: string = 'TOP_FREE', category?: string
         const targetCollection = collectionMap[collection] || collection;
 
         let targetCategory = category;
-        if (collection.includes('GAMES')) {
+        // Only default to GAME if no specific category is provided for a GAMES collection
+        if (collection.includes('GAMES') && !category) {
             targetCategory = 'GAME';
         }
 
@@ -29,6 +30,15 @@ export async function getApps(collection: string = 'TOP_FREE', category?: string
         console.error('Scraper Error:', error);
         return [];
     }
+}
+
+export async function getDiscoverApps(num: number = 10) {
+    const categories = [
+        'APPLICATION', 'SOCIAL', 'COMMUNICATION', 'TOOLS', 'FINANCE',
+        'SHOPPING', 'PHOTOGRAPHY', 'VIDEO_PLAYERS', 'TRAVEL_AND_LOCAL'
+    ];
+    const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+    return await getApps('TOP_FREE', randomCategory, num);
 }
 
 export async function getAppDetails(appId: string) {

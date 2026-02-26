@@ -1,5 +1,6 @@
+import Link from 'next/link';
 import AppCard from '@/components/AppCard';
-import { getApps, getAppDetails } from '@/lib/scraper';
+import { getApps, getAppDetails, getDiscoverApps } from '@/lib/scraper';
 import { getPinnedIds } from '@/lib/pins';
 
 async function getPinnedApps() {
@@ -15,6 +16,17 @@ export default async function Home() {
   const editorsChoice = await getApps('TOP_FREE', undefined, 10);
   const recentlyUpdated = await getApps('NEW_FREE', undefined, 12);
   const topGames = await getApps('TOP_FREE_GAMES', undefined, 12);
+  const discoverApps = await getDiscoverApps(12);
+
+  const categories = [
+    { name: 'Social', id: 'SOCIAL' },
+    { name: 'Tools', id: 'TOOLS' },
+    { name: 'Communication', id: 'COMMUNICATION' },
+    { name: 'Entertainment', id: 'ENTERTAINMENT' },
+    { name: 'Games', id: 'GAME' },
+    { name: 'Productivity', id: 'PRODUCTIVITY' },
+    { name: 'Lifestyle', id: 'LIFESTYLE' },
+  ];
 
   return (
     <div className="flex flex-col gap-12">
@@ -27,8 +39,8 @@ export default async function Home() {
             Safe, secure, and always updated with the latest versions.
           </p>
           <div style={{ marginTop: '32px', display: 'flex', gap: '16px', justifyContent: 'center' }}>
-            <div className="btn-primary" style={{ padding: '14px 32px', fontSize: '16px' }}>Explore Top Apps</div>
-            <div style={{ padding: '14px 32px', fontSize: '16px', fontWeight: 600, border: '2px solid #000', borderRadius: '24px', cursor: 'pointer' }}>Gaming Zone</div>
+            <Link href="/apps" className="btn-primary" style={{ padding: '14px 32px', fontSize: '16px', textDecoration: 'none' }}>Explore Top Apps</Link>
+            <Link href="/games" style={{ padding: '14px 32px', fontSize: '16px', fontWeight: 600, border: '2px solid #000', borderRadius: '24px', cursor: 'pointer', textDecoration: 'none', color: '#000' }}>Gaming Zone</Link>
           </div>
         </div>
       </section>
@@ -36,10 +48,18 @@ export default async function Home() {
       {/* Category Chips Section */}
       <section style={{ marginBottom: '-20px' }}>
         <div className="flex gap-3 overflow-x-auto scrollbar-hide" style={{ paddingBottom: '10px' }}>
-          {['All Categories', 'Social', 'Tools', 'Communication', 'Entertainment', 'Games', 'Productivity', 'Lifestyle'].map((cat, i) => (
-            <div key={cat} className={`chip ${i === 0 ? 'active' : ''}`}>
-              {cat}
-            </div>
+          <Link href="/categories" className="chip active" style={{ textDecoration: 'none' }}>
+            All Categories
+          </Link>
+          {categories.map((cat) => (
+            <Link
+              key={cat.id}
+              href={`/categories/${cat.id.toLowerCase()}`}
+              className="chip"
+              style={{ textDecoration: 'none' }}
+            >
+              {cat.name}
+            </Link>
           ))}
         </div>
       </section>
@@ -58,11 +78,24 @@ export default async function Home() {
         </section>
       )}
 
+      {/* Discover Section (Randomized) */}
+      <section>
+        <div className="section-title" style={{ borderLeftColor: '#4caf50' }}>
+          <h2>Discover Something New</h2>
+          <p style={{ fontSize: '14px', color: 'var(--text-muted)', fontWeight: 400 }}>Randomly picked for you today</p>
+        </div>
+        <div className="responsive-grid">
+          {discoverApps.map((app: any) => (
+            <AppCard key={app.appId} app={app} variant="vertical" />
+          ))}
+        </div>
+      </section>
+
       {/* Editor's Choice Section */}
       <section>
         <div className="section-title">
           <h2>Editor’s Choice</h2>
-          <a href="/categories" style={{ color: 'var(--primary-color)', fontSize: '15px', fontWeight: 700 }}>Browse More →</a>
+          <Link href="/categories" style={{ color: 'var(--primary-color)', fontSize: '15px', fontWeight: 700, textDecoration: 'none' }}>Browse More →</Link>
         </div>
         <div style={{ width: '100%', overflow: 'hidden' }}>
           <div style={{ display: 'flex', gap: '24px', overflowX: 'auto', paddingBottom: '24px', scrollbarWidth: 'none', paddingLeft: '4px' }} className="scrollbar-hide">
@@ -87,6 +120,7 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Games Section */}
       <section>
         <div className="section-title">
           <h2>Trending Games</h2>
