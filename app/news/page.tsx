@@ -59,7 +59,7 @@ export default async function NewsIndex() {
                             </div>
 
                             <h2 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '10px', lineHeight: '1.3' }}>{item.title}</h2>
-                            <p style={{ color: 'var(--text-main)', fontSize: '14px', lineHeight: '1.6', flex: 1 }}>{item.contentSnippet}</p>
+                            <p style={{ color: 'var(--text-main)', fontSize: '14px', lineHeight: '1.6', flex: 1 }}>{item.description}</p>
 
                             <div className="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center text-sm" style={{ color: 'var(--text-muted)' }}>
                                 <span>{new Date(item.pubDate).toLocaleDateString()}</span>

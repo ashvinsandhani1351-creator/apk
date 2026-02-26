@@ -2,6 +2,7 @@ import { getNewsItemBySlug } from '@/lib/news';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Newspaper, ExternalLink, ArrowLeft } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
@@ -11,7 +12,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
     return {
         title: `${article.title} - Bitcryptpress News`,
-        description: article.contentSnippet,
+        description: article.description,
     };
 }
 
@@ -36,6 +37,7 @@ export default async function NewsDetail({ params }: { params: Promise<{ slug: s
             <article className="card" style={{ padding: '0', overflow: 'hidden' }}>
                 {article.imageUrl && (
                     <div style={{ width: '100%', height: '400px', backgroundColor: '#f0f0f0' }}>
+                        {/* Using unoptimized img for external news assets */}
                         <img src={article.imageUrl} alt={article.title} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
                     </div>
                 )}
@@ -59,16 +61,15 @@ export default async function NewsDetail({ params }: { params: Promise<{ slug: s
                         </h1>
                     </header>
 
-                    <div style={{ fontSize: '18px', lineHeight: '1.8', color: '#444', marginBottom: '30px' }}>
-                        <p>{article.contentSnippet}</p>
+                    <div className="markdown-body" style={{ fontSize: '18px', lineHeight: '1.8', color: '#444', marginBottom: '30px' }}>
+                        <ReactMarkdown>{article.content}</ReactMarkdown>
                     </div>
 
-                    <div style={{ backgroundColor: '#f8fafc', padding: '24px', borderRadius: '12px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                        <Newspaper size={32} color="var(--primary-color)" style={{ margin: '0 auto 10px' }} />
-                        <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '8px' }}>Continue Reading</h3>
-                        <p style={{ color: 'var(--text-muted)', marginBottom: '20px' }}>This is a summary of an article provided by {article.source}. To read the full story, visit the original publication.</p>
+                    <div style={{ backgroundColor: '#f8fafc', padding: '24px', borderRadius: '12px', border: '1px solid #e2e8f0', textAlign: 'center', marginTop: '40px' }}>
+                        <h3 style={{ fontSize: '18px', fontWeight: 700, marginBottom: '8px' }}>Read Original</h3>
+                        <p style={{ color: 'var(--text-muted)', marginBottom: '20px' }}>To view the original reporting by {article.source}, follow the link below.</p>
                         <a href={article.link} target="_blank" rel="noopener noreferrer" className="btn-primary inline-flex items-center justify-center gap-2" style={{ textDecoration: 'none' }}>
-                            Read Full Story <ExternalLink size={18} />
+                            Original Story <ExternalLink size={18} />
                         </a>
                     </div>
                 </div>

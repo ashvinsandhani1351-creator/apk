@@ -1,100 +1,69 @@
-import Parser from 'rss-parser';
-
-type FeedSource = {
-    name: string;
-    url: string;
-    category: string;
-};
-
-// Curated list of high-quality app/tech news feeds
-const FEEDS: FeedSource[] = [
-    { name: 'Android Authority', url: 'https://www.androidauthority.com/feed/', category: 'Android News' },
-    { name: 'TechCrunch', url: 'https://techcrunch.com/category/apps/feed/', category: 'App Startup' },
-    { name: 'The Verge', url: 'https://www.theverge.com/rss/index.xml', category: 'Tech Culture' },
-];
+import fs from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
 
 export interface NewsItem {
-    id: string; // The URL slug
+    id: string; // The URL slug (filename)
     title: string;
     link: string;
     pubDate: string;
-    contentSnippet: string;
+    description: string;
     source: string;
     category: string;
     imageUrl?: string;
+    content: string; // The full AI-generated markdown content
 }
 
-const parser = new Parser({
-    customFields: {
-        item: [
-            ['media:content', 'media'],
-            ['content:encoded', 'contentEncoded']
-        ]
-    }
-});
+const newsDirectory = path.join(process.cwd(), 'data', 'news');
 
-// Helper to generate a URL-safe slug from a title
-export function generateSlug(title: string): string {
-    return title
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/(^-|-$)+/g, '');
+// Ensure directory exists
+if (!fs.existsSync(newsDirectory)) {
+    fs.mkdirSync(newsDirectory, { recursive: true });
 }
 
 export async function getLatestNews(): Promise<NewsItem[]> {
-    const allNews: NewsItem[] = [];
+    try {
+        const fileNames = fs.readdirSync(newsDirectory);
+        const allNews = fileNames
+            .filter(fileName => fileName.endsWith('.md'))
+            .map(fileName => {
+                const id = fileName.replace(/\.md$/, '');
+                const fullPath = path.join(newsDirectory, fileName);
+                const fileContents = fs.readFileSync(fullPath, 'utf8');
 
-    // Fetch all feeds concurrently, handling individual failures gracefully
-    const results = await Promise.allSettled(
-        FEEDS.map(async (feedSource) => {
-            const feed = await parser.parseURL(feedSource.url);
-
-            return feed.items.slice(0, 15).map(item => { // Limit to 15 items per feed to avoid bloat
-                // Try to extract an image from various common RSS structures
-                let imageUrl = undefined;
-                if (item.media && item.media['$'] && item.media['$'].url) {
-                    imageUrl = item.media['$'].url;
-                } else if (item.contentEncoded) {
-                    const imgMatch = item.contentEncoded.match(/<img[^>]+src="([^">]+)"/);
-                    if (imgMatch) imageUrl = imgMatch[1];
-                } else if (item.content) {
-                    const imgMatch = item.content.match(/<img[^>]+src="([^">]+)"/);
-                    if (imgMatch) imageUrl = imgMatch[1];
-                }
-
-                // Clean up snippet (remove HTML tags)
-                let cleanSnippet = (item.contentSnippet || item.content || '').replace(/(<([^>]+)>)/gi, "");
-                if (cleanSnippet.length > 200) {
-                    cleanSnippet = cleanSnippet.substring(0, 200) + '...';
-                }
+                // Use gray-matter to parse the metadata section
+                const matterResult = matter(fileContents);
 
                 return {
-                    id: generateSlug(item.title || 'untitled-news-item'),
-                    title: item.title || 'Untitled',
-                    link: item.link || '',
-                    pubDate: item.pubDate || new Date().toISOString(),
-                    contentSnippet: cleanSnippet,
-                    source: feedSource.name,
-                    category: feedSource.category,
-                    imageUrl,
-                } as NewsItem;
+                    id,
+                    content: matterResult.content,
+                    ...(matterResult.data as Omit<NewsItem, 'id' | 'content'>)
+                };
             });
-        })
-    );
 
-    results.forEach(result => {
-        if (result.status === 'fulfilled') {
-            allNews.push(...result.value);
-        } else {
-            console.error("Failed to fetch an RSS feed:", result.reason);
-        }
-    });
-
-    // Sort all aggregated news by date, newest first
-    return allNews.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
+        // Sort posts by date
+        return allNews.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
+    } catch (e) {
+        console.error("Error reading news directory:", e);
+        return [];
+    }
 }
 
 export async function getNewsItemBySlug(slug: string): Promise<NewsItem | null> {
-    const allNews = await getLatestNews();
-    return allNews.find(item => item.id === slug) || null;
+    const fullPath = path.join(newsDirectory, `${slug}.md`);
+    try {
+        if (!fs.existsSync(fullPath)) return null;
+
+        const fileContents = fs.readFileSync(fullPath, 'utf8');
+        const matterResult = matter(fileContents);
+
+        return {
+            id: slug,
+            content: matterResult.content,
+            ...(matterResult.data as Omit<NewsItem, 'id' | 'content'>)
+        };
+    } catch (e) {
+        console.error(`Error reading article ${slug}:`, e);
+        return null;
+    }
 }

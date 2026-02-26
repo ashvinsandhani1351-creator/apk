@@ -132,7 +132,7 @@ export default async function Home() {
                 <div style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
                   <span style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '8px' }}>{item.source} • {new Date(item.pubDate).toLocaleDateString()}</span>
                   <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px', lineHeight: '1.4' }}>{item.title}</h3>
-                  <p style={{ color: 'var(--text-main)', fontSize: '13px', lineHeight: '1.5', flex: 1 }}>{item.contentSnippet.substring(0, 80)}...</p>
+                  <p style={{ color: 'var(--text-main)', fontSize: '13px', lineHeight: '1.5', flex: 1 }}>{item.description.substring(0, 80)}...</p>
                 </div>
               </Link>
             ))}
