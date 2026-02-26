@@ -35,10 +35,10 @@ export default function RootLayout({
               <div className="flex gap-4">
                 <div>
                   <h4 style={{ marginBottom: '15px' }}>PAGES</h4>
-                  <ul style={{ opacity: 0.8, fontSize: '14px' }}>
-                    <li>About Us</li>
-                    <li>Contact</li>
-                    <li>Privacy Policy</li>
+                  <ul style={{ opacity: 0.8, fontSize: '14px', listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <li><Link href="/about" style={{ color: 'white', textDecoration: 'none' }}>About Us</Link></li>
+                    <li><Link href="/contact" style={{ color: 'white', textDecoration: 'none' }}>Contact</Link></li>
+                    <li><Link href="/privacy" style={{ color: 'white', textDecoration: 'none' }}>Privacy Policy</Link></li>
                   </ul>
                 </div>
               </div>
