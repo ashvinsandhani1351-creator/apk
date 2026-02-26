@@ -108,6 +108,42 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Trending Comparisons Section */}
+      <section>
+        <div className="section-title" style={{ borderLeftColor: '#e91e63' }}>
+          <h2>Trending Comparisons</h2>
+          <p style={{ fontSize: '14px', color: 'var(--text-muted)', fontWeight: 400 }}>Which app is right for you?</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <Link href="/compare/com.whatsapp-vs-org.telegram.messenger" className="card hover-lift flex flex-col justify-center items-center gap-2 p-6" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <div className="flex items-center gap-4">
+              <span style={{ fontSize: '18px', fontWeight: 700 }}>WhatsApp</span>
+              <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>VS</span>
+              <span style={{ fontSize: '18px', fontWeight: 700 }}>Telegram</span>
+            </div>
+            <span className="text-primary text-sm font-semibold mt-2">Compare Now →</span>
+          </Link>
+
+          <Link href="/compare/com.instagram.android-vs-com.zhiliaoapp.musically" className="card hover-lift flex flex-col justify-center items-center gap-2 p-6" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <div className="flex items-center gap-4">
+              <span style={{ fontSize: '18px', fontWeight: 700 }}>Instagram</span>
+              <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>VS</span>
+              <span style={{ fontSize: '18px', fontWeight: 700 }}>TikTok</span>
+            </div>
+            <span className="text-primary text-sm font-semibold mt-2">Compare Now →</span>
+          </Link>
+
+          <Link href="/compare/com.spotify.music-vs-com.apple.android.music" className="card hover-lift flex flex-col justify-center items-center gap-2 p-6" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <div className="flex items-center gap-4">
+              <span style={{ fontSize: '18px', fontWeight: 700 }}>Spotify</span>
+              <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>VS</span>
+              <span style={{ fontSize: '18px', fontWeight: 700 }}>Apple Music</span>
+            </div>
+            <span className="text-primary text-sm font-semibold mt-2">Compare Now →</span>
+          </Link>
+        </div>
+      </section>
+
       {/* Grid Sections */}
       <section>
         <div className="section-title">
