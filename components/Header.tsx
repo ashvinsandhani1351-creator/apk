@@ -39,6 +39,11 @@ export default function Header() {
                                 Categories
                             </Link>
                         </li>
+                        <li>
+                            <Link href="/collections" className={`nav-link ${pathname === '/collections' ? 'active' : ''}`}>
+                                Collections
+                            </Link>
+                        </li>
                     </ul>
                 </nav>
                 <div className="header-actions">
