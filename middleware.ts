@@ -43,14 +43,14 @@ export default function middleware(req: NextRequest) {
     if (subdomain && subdomain !== 'www' && subdomain !== 'bitcryptpress') {
         // Only rewrite the root path to the app detail page
         if (url.pathname === '/') {
-            console.log(`Rewriting subdomain ${subdomain} to /app/${subdomain}`);
-            url.pathname = `/app/${subdomain}`;
+            console.log(`Rewriting subdomain ${subdomain} to /subdomain/app/${subdomain}`);
+            url.pathname = `/subdomain/app/${subdomain}`;
             return NextResponse.rewrite(url);
         }
 
-        // If they are trying to go to /download, rewrite to /app/[id]/download
+        // If they are trying to go to /download, rewrite to /subdomain/app/[id]/download
         if (url.pathname === '/download') {
-            url.pathname = `/app/${subdomain}/download`;
+            url.pathname = `/subdomain/app/${subdomain}/download`;
             return NextResponse.rewrite(url);
         }
     }

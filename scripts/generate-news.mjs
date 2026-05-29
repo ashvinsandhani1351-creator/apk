@@ -3,6 +3,8 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env.local' });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,7 +18,7 @@ if (!apiKey) {
     process.exit(1);
 }
 const genAI = new GoogleGenerativeAI(apiKey);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
 const FEEDS = [
     { name: 'Android Authority', url: 'https://www.androidauthority.com/feed/', category: 'Android News' },

@@ -6,6 +6,9 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: "Bitcryptpress - The Hub Of Latest Apps & Games",
   description: "Bitcryptpress is a portal on which you can find APK files of the latest apps & games. We ensure that all the files shared here are safe & secure.",
+  other: {
+    "google-adsense-account": "ca-pub-4513471541472963"
+  }
 };
 
 export default function RootLayout({
